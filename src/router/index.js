@@ -3,7 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 
-import firebase from '@/firebase'
+import { user } from '@/store/auth'
 
 const routes = [
   {
@@ -41,15 +41,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth) {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log(user)
-        next()
-      } else {
-        next({ name: 'Login' })
-      }
-    })
+  if (requiresAuth && !user.value) {
+    next("/login")
   } else {
     next()
   }

@@ -27,11 +27,14 @@ export default defineComponent({
     const password = ref("");
 
     const login = async () => {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email.value, password.value)
-        .then(() => router.push("/"))
-        .catch((error) => console.log(error.code, error.message));
+      try {
+        await firebase
+          .auth()
+          .signInWithEmailAndPassword(email.value, password.value);
+        router.push("/");
+      } catch (e) {
+        console.log(e.code, e.message);
+      }
     };
 
     return {
