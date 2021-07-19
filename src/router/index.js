@@ -3,7 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 
-import { user } from '@/store/auth'
+import { initializeAuth, initialized, user } from '@/store/auth'
 
 const routes = [
   {
@@ -39,7 +39,11 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  if (!initialized.value) {
+    await initializeAuth();
+  }
+
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   if (requiresAuth && !user.value) {
     next("/login")
