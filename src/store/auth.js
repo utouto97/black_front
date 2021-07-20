@@ -1,19 +1,28 @@
-import { ref } from "vue";
+import { reactive, readonly } from "vue";
 import firebase from "@/firebase";
 
-export const initialized = ref(false);
-export const user = ref(null);
-export const token = ref(null);
+const state = reactive({
+  initialized: false,
+  user: null,
+  token: null
+});
 
-export function initializeAuth() {
-  return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged(async u => {
-      console.log(u);
-      initialized.value = true;
-      user.value = u;
-      token.value = await u.getIdToken();
-      resolve();
+export const useAuth = () => {
+  const initializeAuth = async () => {
+    return new Promise((resolve) => {
+      firebase.auth().onAuthStateChanged(async u => {
+        if (u) {
+          state.user = u;
+          state.token = await u.getIdToken();
+        }
+        state.initialized = true;
+        resolve();
+      });
     });
-  });
-}
+  };
 
+  return {
+    state: readonly(state),
+    initializeAuth
+  };
+};
