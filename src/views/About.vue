@@ -6,22 +6,12 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
-import axios from "axios";
-import { useAuth } from "@/common/auth";
+import api from "@/common/api";
 
 export default defineComponent({
   setup() {
-    const auth = useAuth();
-
     onMounted(() => {
-      // console.log("token: " + auth.state.token);
-      axios
-        .get("http://localhost:3000/api/v1", {
-          headers: {
-            Authorization: `Bearer ${auth.state.token}`,
-          },
-        })
-        .then((result) => console.log(result));
+      api.get("/api/v1").then((result) => console.log(result.data));
     });
   },
 });

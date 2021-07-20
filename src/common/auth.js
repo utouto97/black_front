@@ -11,8 +11,8 @@ export const useAuth = () => {
   const initializeAuth = async () => {
     return new Promise((resolve) => {
       firebase.auth().onAuthStateChanged(async u => {
+        state.user = u;
         if (u) {
-          state.user = u;
           state.token = await u.getIdToken();
         }
         state.initialized = true;
