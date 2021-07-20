@@ -7,7 +7,7 @@
 <script>
 import { defineComponent, onMounted } from "vue";
 import axios from "axios";
-import { useAuth } from "@/store/auth";
+import { useAuth } from "@/common/auth";
 
 export default defineComponent({
   setup() {

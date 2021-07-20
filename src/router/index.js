@@ -3,8 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 
-// import { initializeAuth, initialized, user } from '@/store/auth'
-import { useAuth } from "@/store/auth";
+import { useAuth } from "@/common/auth";
 
 const routes = [
   {
