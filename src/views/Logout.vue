@@ -12,18 +12,13 @@ export default defineComponent({
     const router = useRouter();
 
     const logout = async () => {
-      firebase.auth().onAuthStateChanged(() => {
-        firebase
-          .auth()
-          .signOut()
-          .then(() => {
-            console.log("ログアウトしました");
-            router.push("/login");
-          })
-          .catch((error) => {
-            console.log("ログアウトエラー : " + error);
-          });
-      });
+      try {
+        await firebase.auth().signOut();
+        console.log("ログアウトしました");
+        router.push("/login");
+      } catch (e) {
+        console.log("ログアウトエラー : " + e);
+      }
     };
 
     return {
