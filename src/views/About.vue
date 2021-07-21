@@ -6,10 +6,14 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
-import api from "@/common/api";
+import { useAuth } from "@/common/auth";
+import { useApi } from "@/common/api";
 
 export default defineComponent({
   setup() {
+    const auth = useAuth();
+    const api = useApi(auth.state.token);
+
     onMounted(() => {
       api.get("/api/v1").then((result) => console.log(result.data));
     });

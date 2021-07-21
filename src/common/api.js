@@ -1,14 +1,14 @@
 import axios from "axios";
-import { useAuth } from "@/common/auth";
 
-const auth = useAuth();
+export const useApi = (token) => {
+  const api = axios.create({
+    baseURL: process.env.VUE_APP_BASE_URL,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-const api = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${auth.state.token}`,
-  },
-});
+  return api;
+};
 
-export default api;
 

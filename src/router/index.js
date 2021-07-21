@@ -5,7 +5,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: import('@/views/Home.vue'),
+    component: () => import('@/views/Home.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -20,12 +20,18 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: import('@/views/Login.vue'),
+    component: () => import('@/views/Login.vue'),
   },
   {
     path: '/logout',
     name: 'Logout',
-    component: import('@/views/Logout.vue'),
+    component: () => import('@/views/Logout.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/rooms',
+    name: 'Rooms',
+    component: () => import('@/views/Rooms.vue'),
     meta: { requiresAuth: true }
   }
 ]
