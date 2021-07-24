@@ -1,7 +1,11 @@
 <template>
   <div class="rooms">
     <div>部屋一覧</div>
-    <div v-for="r in rooms" :key="r.id">{{ r.uid }} : {{ r.name }}</div>
+    <div v-for="r in rooms" :key="r.id">
+      <router-link v-bind:to="{ name: 'Room', params: { id: r.uid } }">
+        {{ r.uid }} : {{ r.name }}
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -20,7 +24,6 @@ export default defineComponent({
     onMounted(async () => {
       const result = await api.get("/api/v1/user/room");
       rooms.value = result.data.rooms;
-      console.log(rooms.value);
     });
 
     return {

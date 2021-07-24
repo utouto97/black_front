@@ -8,7 +8,7 @@ const state = reactive({
 });
 
 export const useAuth = () => {
-  const initializeAuth = async () => {
+  const initializeAuth = () => {
     return new Promise((resolve) => {
       firebase.auth().onAuthStateChanged(async u => {
         state.user = u;
