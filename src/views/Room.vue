@@ -1,13 +1,24 @@
 <template>
   <div class="room">
     <h3>{{ room.name }}</h3>
-    <table>
+    <table
+      style="
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+      "
+    >
       <tr v-for="m in messages" :key="m.id">
         <td>{{ showDateFormat(new Date(m.created_at)) }}</td>
         <td>{{ m.username }}</td>
         <td>{{ m.content }}</td>
       </tr>
     </table>
+    <form @submit.prevent>
+      <input type="message" v-model="message" />
+      <button type="submit" @click="sendMessage">送信</button>
+    </form>
   </div>
 </template>
 
@@ -28,6 +39,7 @@ export default defineComponent({
     });
 
     const messages = ref([]);
+    const message = ref("");
 
     onMounted(async () => {
       room.uid = useRoute().params.id;
@@ -35,6 +47,14 @@ export default defineComponent({
       room.name = result.data.room.name;
       getMessages();
     });
+
+    const sendMessage = async () => {
+      console.log(message.value);
+      const result = await api.post(`/api/v1/room/${room.uid}/message`, {
+        content: message.value,
+      });
+      console.log(result);
+    };
 
     const getMessages = async () => {
       const result = await api.get(`/api/v1/room/${room.uid}/message`);
@@ -57,6 +77,8 @@ export default defineComponent({
     return {
       room,
       messages,
+      message,
+      sendMessage,
       showDateFormat,
     };
   },
