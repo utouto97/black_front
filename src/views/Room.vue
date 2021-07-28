@@ -57,7 +57,11 @@ export default defineComponent({
     };
 
     const getMessages = async () => {
-      const result = await api.get(`/api/v1/room/${room.uid}/message`);
+      const result = await api.get(`/api/v1/room/${room.uid}/message`, {
+        params: {
+          lim: 50,
+        },
+      });
       messages.value = result.data.messages;
       console.log(result);
     };
