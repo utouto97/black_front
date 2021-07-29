@@ -46,6 +46,7 @@ export default defineComponent({
       const result = await api.get(`/api/v1/room/${room.uid}`);
       room.name = result.data.room.name;
       getMessages();
+      setInterval(() => getMessages(), 1000);
     });
 
     const sendMessage = async () => {
