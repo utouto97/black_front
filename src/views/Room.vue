@@ -1,6 +1,6 @@
 <template>
   <div class="room">
-    <h3>{{ room.name }}</h3>
+    <h3 class="font-bold text-xl text-blue-500">{{ room.name }}</h3>
     <form @submit.prevent>
       <input type="message" v-model="message" />
       <button type="submit" @click="sendMessage">送信</button>
