@@ -1,6 +1,10 @@
 <template>
   <div class="room">
     <h3>{{ room.name }}</h3>
+    <form @submit.prevent>
+      <input type="message" v-model="message" />
+      <button type="submit" @click="sendMessage">送信</button>
+    </form>
     <table
       style="
         width: 600px;
@@ -15,10 +19,6 @@
         <td>{{ m.content }}</td>
       </tr>
     </table>
-    <form @submit.prevent>
-      <input type="message" v-model="message" />
-      <button type="submit" @click="sendMessage">送信</button>
-    </form>
   </div>
 </template>
 
@@ -54,6 +54,8 @@ export default defineComponent({
         content: message.value,
       });
       console.log(result);
+      message.value = "";
+      getMessages();
     };
 
     const getMessages = async () => {
