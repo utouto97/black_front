@@ -1,24 +1,54 @@
 <template>
   <div class="room">
-    <h3 class="font-bold text-xl text-blue-500">{{ room.name }}</h3>
+    <h3 class="font-bold text-xl my-4">{{ room.name }}</h3>
     <form @submit.prevent>
-      <input type="message" v-model="message" />
-      <button type="submit" @click="sendMessage">送信</button>
+      <input
+        type="text"
+        v-model="message"
+        class="
+          border
+          text-gray-700
+          py-2
+          px-2
+          mx-2
+          rounded-lg
+          focus:outline-none
+          focus:border-blue-500
+        "
+      />
+      <button
+        type="submit"
+        @click="sendMessage"
+        class="
+          bg-blue-500
+          hover:bg-blue-700
+          text-white
+          font-bold
+          py-2
+          px-4
+          rounded
+        "
+      >
+        送信
+      </button>
     </form>
-    <table
-      style="
-        width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: left;
-      "
-    >
-      <tr v-for="m in messages" :key="m.id">
-        <td>{{ showDateFormat(new Date(m.created_at)) }}</td>
-        <td>{{ m.username }}</td>
-        <td>{{ m.content }}</td>
-      </tr>
-    </table>
+    <div class="w-80 mx-auto my-4">
+      <div v-for="m in messages" :key="m.id">
+        <div class="ml-8 mt-1" v-if="m.user_id == 1">
+          <div class="bg-blue-200 rounded-lg py-1">{{ m.content }}</div>
+          <div class="text-xs text-right pr-2">
+            {{ showDateFormat(new Date(m.created_at)) }}
+          </div>
+        </div>
+        <div class="mr-8 mt-1" v-else>
+          <div class="text-xs text-left pl-2">{{ m.username }}</div>
+          <div class="bg-gray-200 rounded-lg py-1">{{ m.content }}</div>
+          <div class="text-xs text-right pr-2">
+            {{ showDateFormat(new Date(m.created_at)) }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -66,13 +96,27 @@ export default defineComponent({
         },
       });
       messages.value = result.data.messages;
-      console.log(result);
     };
+
+    const monthname = [
+      "Jan.",
+      "Feb.",
+      "Mar.",
+      "Apr.",
+      "May",
+      "Jun.",
+      "Jul.",
+      "Aug.",
+      "Sep.",
+      "Oct.",
+      "Nov.",
+      "Dec.",
+    ];
 
     const showDateFormat = (date) => {
       return (
-        date.getMonth() +
-        "/" +
+        monthname[date.getMonth()] +
+        " " +
         date.getDate() +
         " " +
         date.getHours() +
