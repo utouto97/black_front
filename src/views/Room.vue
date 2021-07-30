@@ -34,15 +34,19 @@
     </form>
     <div class="w-80 mx-auto my-4">
       <div v-for="m in messages" :key="m.id">
-        <div class="ml-8 mt-1" v-if="m.user_id == 1">
-          <div class="bg-blue-200 rounded-lg py-1">{{ m.content }}</div>
+        <div class="ml-8 mt-2" v-if="m.user_id == 1">
+          <div class="text-left bg-blue-200 rounded-lg py-2 px-4">
+            {{ m.content }}
+          </div>
           <div class="text-xs text-right pr-2">
             {{ showDateFormat(new Date(m.created_at)) }}
           </div>
         </div>
         <div class="mr-8 mt-1" v-else>
           <div class="text-xs text-left pl-2">{{ m.username }}</div>
-          <div class="bg-gray-200 rounded-lg py-1">{{ m.content }}</div>
+          <div class="text-left bg-gray-200 rounded-lg py-2 px-4">
+            {{ m.content }}
+          </div>
           <div class="text-xs text-right pr-2">
             {{ showDateFormat(new Date(m.created_at)) }}
           </div>
@@ -95,10 +99,10 @@ export default defineComponent({
           lim: 50,
         },
       });
-      messages.value = result.data.messages;
+      messages.value = [...new Set(result.data.messages)];
     };
 
-    const monthname = [
+    const monthName = [
       "Jan.",
       "Feb.",
       "Mar.",
@@ -115,13 +119,13 @@ export default defineComponent({
 
     const showDateFormat = (date) => {
       return (
-        monthname[date.getMonth()] +
+        monthName[date.getMonth()] +
         " " +
-        date.getDate() +
+        ("0" + date.getDate()).slice(-2) +
         " " +
-        date.getHours() +
+        ("0" + date.getHours()).slice(-2) +
         ":" +
-        date.getMinutes()
+        ("0" + date.getMinutes()).slice(-2)
       );
     };
 
