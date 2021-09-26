@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from "@/common/auth";
+import useFirebaseAuth from '@/common/auth'
+
+const state = useFirebaseAuth();
 
 const routes = [
   {
@@ -23,12 +25,6 @@ const routes = [
     component: () => import('@/views/Login.vue'),
   },
   {
-    path: '/logout',
-    name: 'Logout',
-    component: () => import('@/views/Logout.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
     path: '/rooms',
     name: 'Rooms',
     component: () => import('@/views/Rooms.vue'),
@@ -48,17 +44,12 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const auth = useAuth();
-
-  if (!auth.state.initialized) {
-    await auth.initializeAuth();
-  }
-
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth && !auth.state.user) {
-    next("/login")
+  if (to.matched.some(record => record.meta.requiresAuth) && !state.user.value) {
+    next({ path: "/login" });
+  } else if (to.matched.some(record => !record.meta.requiresAuth) && state.user.value) {
+    next({ path: "/" });
   } else {
-    next()
+    next();
   }
 })
 

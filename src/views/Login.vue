@@ -1,15 +1,18 @@
 <template>
-  <div class="login">
-    <form @submit.prevent>
-      <div>
-        <label for="email">メールアドレス:</label>
-        <input type="email" v-model="email" />
+  <div class="login w-full max-w-xs mx-auto">
+    <form @submit.prevent class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">メールアドレス</label>
+        <input type="email" v-model="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
       </div>
-      <div>
-        <label for="password">パスワード:</label>
-        <input type="password" v-model="password" />
+      <div class="mb-6">
+        <label for="password" class="block text-gray-700 text-sm font-bold mb-2">パスワード</label>
+        <input type="password" v-model="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
       </div>
-      <button type="submit" @click="login">ログイン</button>
+      <div class="flex items-center justify-between">
+        <button type="submit" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">新規登録</button>
+        <button type="submit" @click="doLogin" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">ログイン</button>
+      </div>
     </form>
   </div>
 </template>
@@ -17,7 +20,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import firebase from "@/firebase";
+import useFirebaseAuth from "@/common/auth";
 
 export default defineComponent({
   setup() {
@@ -26,21 +29,17 @@ export default defineComponent({
     const email = ref("");
     const password = ref("");
 
-    const login = async () => {
-      try {
-        await firebase
-          .auth()
-          .signInWithEmailAndPassword(email.value, password.value);
-        router.push("/");
-      } catch (e) {
-        console.log(e.code, e.message);
-      }
+    const { login } = useFirebaseAuth();
+
+    const doLogin = async () => {
+      await login(email.value, password.value);
+      router.push("/");
     };
 
     return {
       email,
       password,
-      login,
+      doLogin,
     };
   },
 });

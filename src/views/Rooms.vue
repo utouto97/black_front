@@ -10,26 +10,26 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
-import { useAuth } from "@/common/auth";
-import { useApi } from "@/common/api";
+// import { defineComponent, onMounted, ref } from "vue";
+// import { useAuth } from "@/common/auth";
+// import { useApi } from "@/common/api";
 
-export default defineComponent({
-  setup() {
-    const auth = useAuth();
-    const api = useApi(auth.state.token);
+// export default defineComponent({
+//   setup() {
+//     const auth = useAuth();
+//     const api = useApi(auth.state.token);
 
-    const rooms = ref([]);
+//     const rooms = ref([]);
 
-    onMounted(async () => {
-      const result = await api.get("/api/v1/user/room");
-      rooms.value = result.data.rooms;
-    });
+//     onMounted(async () => {
+//       const result = await api.get("/api/v1/user/room");
+//       rooms.value = result.data.rooms;
+//     });
 
-    return {
-      rooms,
-    };
-  },
-});
+//     return {
+//       rooms,
+//     };
+//   },
+// });
 </script>
 

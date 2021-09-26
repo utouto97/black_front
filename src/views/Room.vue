@@ -57,85 +57,85 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref } from "vue";
-import { useAuth } from "@/common/auth";
-import { useApi } from "@/common/api";
-import { useRoute } from "vue-router";
+import { defineComponent } from "vue";
+// import { defineComponent, onMounted, reactive, ref } from "vue";
+// import { useApi } from "@/common/api";
+// import { useRoute } from "vue-router";
 
 export default defineComponent({
   setup() {
-    const auth = useAuth();
-    const api = useApi(auth.state.token);
+  //   const auth = useAuth();
+  //   const api = useApi(auth.state.token);
 
-    const room = reactive({
-      uid: "",
-      name: "",
-    });
+  //   const room = reactive({
+  //     uid: "",
+  //     name: "",
+  //   });
 
-    const messages = ref([]);
-    const message = ref("");
+  //   const messages = ref([]);
+  //   const message = ref("");
 
-    onMounted(async () => {
-      room.uid = useRoute().params.id;
-      const result = await api.get(`/api/v1/room/${room.uid}`);
-      room.name = result.data.room.name;
-      getMessages();
-      setInterval(() => getMessages(), 1000);
-    });
+  //   onMounted(async () => {
+  //     room.uid = useRoute().params.id;
+  //     const result = await api.get(`/api/v1/room/${room.uid}`);
+  //     room.name = result.data.room.name;
+  //     getMessages();
+  //     setInterval(() => getMessages(), 1000);
+  //   });
 
-    const sendMessage = async () => {
-      console.log(message.value);
-      const result = await api.post(`/api/v1/room/${room.uid}/message`, {
-        content: message.value,
-      });
-      console.log(result);
-      message.value = "";
-      getMessages();
-    };
+  //   const sendMessage = async () => {
+  //     console.log(message.value);
+  //     const result = await api.post(`/api/v1/room/${room.uid}/message`, {
+  //       content: message.value,
+  //     });
+  //     console.log(result);
+  //     message.value = "";
+  //     getMessages();
+  //   };
 
-    const getMessages = async () => {
-      const result = await api.get(`/api/v1/room/${room.uid}/message`, {
-        params: {
-          lim: 50,
-        },
-      });
-      messages.value = [...new Set(result.data.messages)];
-    };
+  //   const getMessages = async () => {
+  //     const result = await api.get(`/api/v1/room/${room.uid}/message`, {
+  //       params: {
+  //         lim: 50,
+  //       },
+  //     });
+  //     messages.value = [...new Set(result.data.messages)];
+  //   };
 
-    const monthName = [
-      "Jan.",
-      "Feb.",
-      "Mar.",
-      "Apr.",
-      "May",
-      "Jun.",
-      "Jul.",
-      "Aug.",
-      "Sep.",
-      "Oct.",
-      "Nov.",
-      "Dec.",
-    ];
+  //   const monthName = [
+  //     "Jan.",
+  //     "Feb.",
+  //     "Mar.",
+  //     "Apr.",
+  //     "May",
+  //     "Jun.",
+  //     "Jul.",
+  //     "Aug.",
+  //     "Sep.",
+  //     "Oct.",
+  //     "Nov.",
+  //     "Dec.",
+  //   ];
 
-    const showDateFormat = (date) => {
-      return (
-        monthName[date.getMonth()] +
-        " " +
-        ("0" + date.getDate()).slice(-2) +
-        " " +
-        ("0" + date.getHours()).slice(-2) +
-        ":" +
-        ("0" + date.getMinutes()).slice(-2)
-      );
-    };
+  //   const showDateFormat = (date) => {
+  //     return (
+  //       monthName[date.getMonth()] +
+  //       " " +
+  //       ("0" + date.getDate()).slice(-2) +
+  //       " " +
+  //       ("0" + date.getHours()).slice(-2) +
+  //       ":" +
+  //       ("0" + date.getMinutes()).slice(-2)
+  //     );
+  //   };
 
-    return {
-      room,
-      messages,
-      message,
-      sendMessage,
-      showDateFormat,
-    };
+  //   return {
+  //     room,
+  //     messages,
+  //     message,
+  //     sendMessage,
+  //     showDateFormat,
+  //   };
   },
 });
 </script>

@@ -1,28 +1,55 @@
-import { reactive, readonly } from "vue";
-import firebase from "@/firebase";
+import { reactive, toRefs } from "vue";
+import firebase from "firebase";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+    authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.VUE_APP_FIREBASE_APP_ID,
+    measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
+  });
+}
 
 const state = reactive({
-  initialized: false,
   user: null,
-  token: null
+  initialized: false,
 });
 
-export const useAuth = () => {
-  const initializeAuth = () => {
+export default function () {
+
+  const authCheck = async () => {
     return new Promise((resolve) => {
-      firebase.auth().onAuthStateChanged(async u => {
-        state.user = u;
-        if (u) {
-          state.token = await u.getIdToken();
-        }
-        state.initialized = true;
-        resolve();
-      });
+      !state.initialized &&
+        firebase.auth().onAuthStateChanged(async (u) => {
+          if (u) {
+            state.user = u;
+          } else {
+            state.user = null;
+          }
+
+          state.initialized = true;
+          resolve();
+        });
     });
   };
 
-  return {
-    state: readonly(state),
-    initializeAuth
+  const login = async (email, password) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
   };
-};
+
+  const logout = async () => {
+    firebase.auth().signOut();
+  };
+
+  return {
+    ...toRefs(state),
+    login,
+    logout,
+    authCheck,
+  };
+}

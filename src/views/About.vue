@@ -5,18 +5,18 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
-import { useAuth } from "@/common/auth";
-import { useApi } from "@/common/api";
+import { defineComponent } from "vue";
+// import { defineComponent, onMounted } from "vue";
+// import { useApi } from "@/common/api";
 
 export default defineComponent({
   setup() {
-    const auth = useAuth();
-    const api = useApi(auth.state.token);
+    // const auth = useAuth();
+    // const api = useApi(auth.state.token);
 
-    onMounted(() => {
-      api.get("/api/v1").then((result) => console.log(result.data));
-    });
+    // onMounted(() => {
+    //   api.get("/api/v1").then((result) => console.log(result.data));
+    // });
   },
 });
 </script>
