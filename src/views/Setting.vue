@@ -57,6 +57,8 @@ export default defineComponent({
           username: username.value
         }
       });
+
+      alert("ユーザーネームを"+username.value+"に変更しました。");
       router.push("/");
     };
 
