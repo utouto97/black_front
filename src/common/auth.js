@@ -31,19 +31,27 @@ export default function () {
           }
 
           state.initialized = true;
-          resolve();
+          resolve(true);
         });
     });
   };
 
   const login = async (email, password) => {
-    firebase
+    return firebase
       .auth()
-      .signInWithEmailAndPassword(email, password);
+      .signInWithEmailAndPassword(email, password)
+      .then(u => {
+        state.user = u;
+      });
   };
 
   const logout = async () => {
-    firebase.auth().signOut();
+    return firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        state.user = null;
+      })
   };
 
   return {

@@ -44,6 +44,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  // console.log(to.name);
   if (to.matched.some(record => record.meta.requiresAuth) && !state.user.value) {
     next({ path: "/login" });
   } else if (to.matched.some(record => !record.meta.requiresAuth) && state.user.value) {

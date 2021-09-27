@@ -1,15 +1,19 @@
 <template>
-  <div id="nav">
-    <div>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-    </div>
-    <div>
-      <router-link to="/rooms">Rooms</router-link>
-    </div>
+  <div class="mt-8 w-full max-w-sm mx-auto bg-white shadow-md rounded-md">
+    <router-view />
   </div>
-  <router-view />
 </template>
+
+<script>
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  components: {
+  },
+  setup(){
+  }
+});
+</script>
 
 <style>
 #app {
