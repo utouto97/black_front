@@ -20,6 +20,12 @@ const routes = [
     name: 'Register',
     component: () => import('@/views/Register.vue'),
   },
+  {
+    path: '/setting',
+    name: 'Setting',
+    component: () => import('@/views/Setting.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
