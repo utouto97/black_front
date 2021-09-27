@@ -26,6 +26,12 @@ const routes = [
     component: () => import('@/views/Setting.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/:id',
+    name: 'Room',
+    component: () => import('@/views/Room.vue'),
+    meta: { requiresAuth: true }
+  }
 ]
 
 const router = createRouter({
