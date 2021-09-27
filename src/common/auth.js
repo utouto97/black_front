@@ -15,6 +15,7 @@ if (!firebase.apps.length) {
 
 const state = reactive({
   user: null,
+  token: null,
   initialized: false,
 });
 
@@ -26,8 +27,10 @@ export default function () {
         firebase.auth().onAuthStateChanged(async (u) => {
           if (u) {
             state.user = u;
+            state.token = await u.getIdToken();
           } else {
             state.user = null;
+            state.token = null;
           }
 
           state.initialized = true;
@@ -36,12 +39,23 @@ export default function () {
     });
   };
 
+  const register = async (email, password) => {
+    return firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(async u => {
+        state.user = u.user;
+        state.token = await u.user.getIdToken();
+      });
+  };
+
   const login = async (email, password) => {
     return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(u => {
-        state.user = u;
+      .then(async u => {
+        state.user = u.user;
+        state.token = await u.user.getIdToken();
       });
   };
 
@@ -51,11 +65,13 @@ export default function () {
       .signOut()
       .then(() => {
         state.user = null;
+        state.token = null;
       })
   };
 
   return {
     ...toRefs(state),
+    register,
     login,
     logout,
     authCheck,

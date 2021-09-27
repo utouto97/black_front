@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const useApi = (token) => {
+export default (token) => {
   const api = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL,
     headers: {
@@ -10,5 +10,3 @@ export const useApi = (token) => {
 
   return api;
 };
-
-
