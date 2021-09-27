@@ -80,10 +80,10 @@ export default defineComponent({
 
       if (error) return;
 
-      console.log(token);
+      console.log(token.value);
       await register(email.value, password.value);
       await getApi(token.value).post("/api/v1/user", {
-        params: {
+        user: {
           username: username.value
         }
       });
