@@ -1,6 +1,22 @@
 <template>
   <div class="room">
-    <h2 class="font-bold text-xl my-4">{{ room.name }}</h2>
+    <div class="font-bold text-xl my-4">
+      {{ room.name }}
+      <button @click="roomname_edit = !roomname_edit" class="h-8 w-8 py-1 px-1 mx-auto inline text-center rounded-full hover:bg-gray-700 hover:text-white text-gray-700">
+        <svg class="h-6 w-6"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />  <circle cx="12" cy="12" r="3" /></svg>
+      </button>
+      <div v-if="roomname_edit" class="w-full mt-2 px-4 flex">
+        <p class="flex-1 text-xs">変更後</p>
+        <input
+          type="text"
+          v-model="roomname"
+          class="flex-auto border text-gray-700 py-2 px-2 mx-2 rounded-lg focus:outline-none focus:border-blue-500" />
+        <button
+          type="submit"
+          @click="changeRoomname"
+          class="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">変更</button>
+      </div>
+    </div>
     <form @submit.prevent>
       <input
         type="text"
@@ -38,7 +54,7 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import useFirebaseAuth from "@/common/auth";
 import getApi from "@/common/api";
 import Navbar from "@/components/Navbar";
@@ -49,7 +65,8 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    console.log(route.params.id);
+    const router = useRouter();
+    // console.log(route.params.id);
 
     const { getToken } = useFirebaseAuth();
 
@@ -60,6 +77,8 @@ export default defineComponent({
     });
     const message = ref("");
     const messages = ref([]);
+    const roomname_edit = ref(false);
+    const roomname = ref("");
 
     onMounted(async () => {
       const user_info = await getApi(await getToken()).get("/api/v1/user");
@@ -104,13 +123,28 @@ export default defineComponent({
       );
     };
 
+    const changeRoomname = async () => {
+      console.log(roomname.value);
+      await getApi(await getToken()).patch(`/api/v1/room/${room.uid}`, {
+        room: {
+          name: roomname.value
+        }
+      });
+
+      alert("ルーム名を"+roomname.value+"に変更しました。");
+      router.go({ path: router.currentRoute.path, force: true });
+    };
+
     return {
       user_id,
       room,
       message,
       messages,
+      roomname_edit,
+      roomname,
       sendMessage,
       showDateFormat,
+      changeRoomname,
     };
   },
 });
