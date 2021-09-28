@@ -16,6 +16,7 @@ if (!firebase.apps.length) {
 const state = reactive({
   user: null,
   token: null,
+  expirationTime: null,
   initialized: false,
 });
 
@@ -27,10 +28,13 @@ export default function () {
         firebase.auth().onAuthStateChanged(async (u) => {
           if (u) {
             state.user = u;
-            state.token = await u.getIdToken();
+            const res = await u.getIdTokenResult();
+            state.token = res.token;
+            state.expirationTime = new Date(res.expirationTime);
           } else {
             state.user = null;
             state.token = null;
+            state.expirationTime = null;
           }
 
           state.initialized = true;
@@ -39,13 +43,25 @@ export default function () {
     });
   };
 
+  const getToken = async () => {
+    if (state.expirationTime < new Date()) {
+      const res = await state.user.getIdTokenResult();
+      state.token = res.token;
+      state.expirationTime = new Date(res.expirationTime);
+    }
+
+    return state.token;
+  };
+
   const register = async (email, password) => {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async u => {
         state.user = u.user;
-        state.token = await u.user.getIdToken();
+        const res = await u.user.getIdTokenResult();
+        state.token = res.token;
+        state.expirationTime = new Date(res.expirationTime);
       });
   };
 
@@ -55,7 +71,9 @@ export default function () {
       .signInWithEmailAndPassword(email, password)
       .then(async u => {
         state.user = u.user;
-        state.token = await u.user.getIdToken();
+        const res = await u.user.getIdTokenResult();
+        state.token = res.token;
+        state.expirationTime = new Date(res.expirationTime);
       });
   };
 
@@ -66,6 +84,7 @@ export default function () {
       .then(() => {
         state.user = null;
         state.token = null;
+        state.expirationTime = null;
       })
   };
 
@@ -75,5 +94,6 @@ export default function () {
     login,
     logout,
     authCheck,
+    getToken,
   };
 }

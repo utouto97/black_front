@@ -51,7 +51,7 @@ export default defineComponent({
     const route = useRoute();
     console.log(route.params.id);
 
-    const { token } = useFirebaseAuth();
+    const { getToken } = useFirebaseAuth();
 
     const user_id = ref(-1);
     const room = reactive({
@@ -62,16 +62,16 @@ export default defineComponent({
     const messages = ref([]);
 
     onMounted(async () => {
-      const user_info = await getApi(token.value).get("/api/v1/user");
+      const user_info = await getApi(await getToken()).get("/api/v1/user");
       user_id.value = user_info.data.user.id;
       room.uid = route.params.id;
-      const res = await getApi(token.value).get(`/api/v1/room/${room.uid}`);
+      const res = await getApi(await getToken()).get(`/api/v1/room/${room.uid}`);
       room.name = res.data.room.name;
       getMessages();
     });
 
     const sendMessage = async () => {
-      await getApi(token.value).post(`/api/v1/room/${room.uid}/message`, {
+      await getApi(await getToken()).post(`/api/v1/room/${room.uid}/message`, {
         content: message.value,
       });
       message.value = "";
@@ -79,7 +79,7 @@ export default defineComponent({
     };
 
     const getMessages = async () => {
-      const res = await getApi(token.value).get(`/api/v1/room/${room.uid}/message`, {
+      const res = await getApi(await getToken()).get(`/api/v1/room/${room.uid}/message`, {
         params: {
           lim: 50,
         },

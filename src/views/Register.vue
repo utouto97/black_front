@@ -40,7 +40,7 @@ import getApi from "@/common/api";
 export default defineComponent({
   setup() {
     const router = useRouter();
-    const { register, token } = useFirebaseAuth();
+    const { register, getToken } = useFirebaseAuth();
 
     const email = ref("");
     const password = ref("");
@@ -80,9 +80,8 @@ export default defineComponent({
 
       if (error) return;
 
-      console.log(token.value);
       await register(email.value, password.value);
-      await getApi(token.value).post("/api/v1/user", {
+      await getApi(await getToken()).post("/api/v1/user", {
         user: {
           username: username.value
         }

@@ -34,14 +34,14 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const { token } = useFirebaseAuth();
+    const { getToken } = useFirebaseAuth();
 
     const username_old = ref("");
     const username = ref("");
     const error_username = ref("");
 
     onMounted(async () => {
-      const user = await getApi(token.value).get("/api/v1/user");
+      const user = await getApi(await getToken()).get("/api/v1/user");
       username_old.value = user.data.user.username;
     });
 
@@ -52,7 +52,7 @@ export default defineComponent({
         return;
       }
 
-      await getApi(token.value).patch("/api/v1/user", {
+      await getApi(await getToken()).patch("/api/v1/user", {
         user: {
           username: username.value
         }

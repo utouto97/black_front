@@ -21,12 +21,12 @@ export default defineComponent({
     Navbar
   },
   setup() {
-    const { token } = useFirebaseAuth();
+    const { getToken } = useFirebaseAuth();
 
     const rooms = ref([]);
 
     onMounted(async () => {
-      const res = await getApi(token.value).get("/api/v1/user/room");
+      const res = await getApi(await getToken()).get("/api/v1/user/room");
       rooms.value = res.data.rooms;
     });
 

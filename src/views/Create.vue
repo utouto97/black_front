@@ -31,13 +31,13 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const { token } = useFirebaseAuth();
+    const { getToken } = useFirebaseAuth();
 
     const name = ref("");
     const password = ref("");
 
     const createRoom = async () => {
-      const res = await getApi(token.value).post("/api/v1/room/", {
+      const res = await getApi(await getToken()).post("/api/v1/room/", {
         room: {
           name: name.value,
           password: password.value
@@ -45,7 +45,7 @@ export default defineComponent({
       });
       const uid = res.data.room.uid;
 
-      await getApi(token.value).post(`/api/v1/user/room/${uid}`, {
+      await getApi(await getToken()).post(`/api/v1/user/room/${uid}`, {
         password: password.value
       });
 
