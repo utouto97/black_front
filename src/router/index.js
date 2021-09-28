@@ -31,7 +31,13 @@ const routes = [
     name: 'Room',
     component: () => import('@/views/Room.vue'),
     meta: { requiresAuth: true }
-  }
+  },
+  {
+    path: '/create',
+    name: 'Create',
+    component: () => import('@/views/Create.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
