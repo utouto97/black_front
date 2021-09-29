@@ -5,6 +5,9 @@
       <button @click="roomname_edit = !roomname_edit" class="h-8 w-8 py-1 px-1 mx-auto inline text-center rounded-full hover:bg-gray-700 hover:text-white text-gray-700">
         <svg class="h-6 w-6"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />  <circle cx="12" cy="12" r="3" /></svg>
       </button>
+      <button @click="leaveRoom" class="ml-2 py-1 px-2 text-xs text-gray-500 rounded hover:text-white hover:bg-gray-500">
+        退室
+      </button>
       <div v-if="roomname_edit" class="w-full mt-2 px-4 flex">
         <p class="flex-1 text-xs">変更後</p>
         <input
@@ -124,7 +127,7 @@ export default defineComponent({
     };
 
     const changeRoomname = async () => {
-      console.log(roomname.value);
+      // console.log(roomname.value);
       await getApi(await getToken()).patch(`/api/v1/room/${room.uid}`, {
         room: {
           name: roomname.value
@@ -133,6 +136,12 @@ export default defineComponent({
 
       alert("ルーム名を"+roomname.value+"に変更しました。");
       router.go({ path: router.currentRoute.path, force: true });
+    };
+
+    const leaveRoom = async () => {
+      await getApi(await getToken()).delete(`/api/v1/user/room/${room.uid}`);
+      alert("このルームを退室しました。");
+      router.push("/")
     };
 
     return {
@@ -145,6 +154,7 @@ export default defineComponent({
       sendMessage,
       showDateFormat,
       changeRoomname,
+      leaveRoom,
     };
   },
 });
