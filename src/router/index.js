@@ -47,7 +47,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth) && !state.user.value) {
-    next({ path: "/login" });
+    next({ path: "/login", query: { redirect: to.fullPath } });
   } else if (to.matched.some(record => !record.meta.requiresAuth) && state.user.value) {
     next({ path: "/" });
   } else {

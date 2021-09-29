@@ -22,11 +22,12 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import useFirebaseAuth from "@/common/auth";
 
 export default defineComponent({
   setup() {
+    const route = useRoute();
     const router = useRouter();
 
     const email = ref("");
@@ -42,7 +43,11 @@ export default defineComponent({
         error.value = "ログインに失敗しました。";
       }
 
-      router.push("/");
+      if (route.query.redirect) {
+        router.push(route.query.redirect);
+      } else {
+        router.push("/");
+      }
     };
 
     return {
