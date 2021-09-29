@@ -38,6 +38,12 @@ const routes = [
     component: () => import('@/views/Create.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/enter/:id',
+    name: 'Enter',
+    component: () => import('@/views/Enter.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
