@@ -2,4 +2,7 @@ FROM node:alpine
 
 WORKDIR /app
 
-RUN npm install -g npm @vue/cli
+RUN npm install -g @vue/cli
+
+COPY package*.json /app/
+RUN npm install
